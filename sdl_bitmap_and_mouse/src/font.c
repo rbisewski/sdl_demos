@@ -20,29 +20,18 @@ char* newFontPoly(FontPoly* ft, int x, int y, int h, int w,
   TTF_Font* ttf, SDL_Color color, const char* const text,
   SDL_Renderer* renderer) {
 
-    // Input validation.
     if (h < 0 || w < 0 || !ttf || strlen(text) < 1) {
         return "newFontPoly() --> invalid input";
-    }
-
-    // Attempt to assign a chunk of memory for the FontPoly object.
-    ft = (FontPoly*) calloc(1, sizeof(FontPoly));
-
-    // Ensure the calloc worked.
-    if (!ft) {
-        return "newFontPoly() --> calloc of FontTexture failed";
     }
 
     // Assign the given TTF to the font poly.
     ft->ttf = ttf;
 
-    // Calloc memory for the SDL rectangle.
-    ft->rect = (SDL_Rect*) calloc(1, sizeof(SDL_Rect));
-
-    // Ensure the rectangle was generated correctly.
     if (!ft->rect) {
-        free(ft);
-        return "newFontPoly() --> calloc of SDL_Rect failed";
+        ft->rect = (SDL_Rect*) calloc(1, sizeof(SDL_Rect));
+        if (!ft->rect) {
+            return "newFontPoly() --> calloc of SDL_Rect failed";
+        }
     }
 
     // Set the internal rectangle properties.
@@ -50,25 +39,28 @@ char* newFontPoly(FontPoly* ft, int x, int y, int h, int w,
     ft->rect->y = y;
     ft->rect->w = w;
     ft->rect->h = h;
- 
-    // Generate a SDL surface object using the given font and text.
-    ft->surface = TTF_RenderText_Blended(ttf, (char*) text, color);
 
-    // Ensure the surface was generated correctly.
+    // Generate a SDL surface object using the given font and text.
+    if (ft->surface) {
+        SDL_FreeSurface(ft->surface);
+    }
+    ft->surface = TTF_RenderText_Blended(ttf, (char*) text, color);
     if (!ft->surface) {
-        free(ft);
         free(ft->rect);
+        ft->rect = NULL;
         return "newFontPoly() --> TTF_RenderText_Blended failed";
     }
 
     // Create a SDL texture from the surface.
+    if (ft->texture) {
+        SDL_DestroyTexture(ft->texture);
+    }
     ft->texture = SDL_CreateTextureFromSurface(renderer, ft->surface);
-
-    // Ensure the surface was generated correctly.
     if (!ft->texture) {
-        free(ft);
         free(ft->rect);
-        free(ft->surface);
+        ft->rect = NULL;
+        SDL_FreeSurface(ft->surface);
+        ft->surface = NULL;
         return "newFontPoly() --> SDL_CreateTextureFromSurface failed";
     }
 
@@ -93,7 +85,7 @@ bool freeFontPoly(FontPoly* ft) {
     }
 
     if (ft->texture) {
-        free(ft->texture);
+        SDL_DestroyTexture(ft->texture);
         ft->texture = NULL;
     }
 
@@ -103,7 +95,7 @@ bool freeFontPoly(FontPoly* ft) {
     }
 
     if (ft->surface) {
-        free(ft->surface);
+        SDL_FreeSurface(ft->surface);
         ft->surface = NULL;
     }
 

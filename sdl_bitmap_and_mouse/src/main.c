@@ -50,6 +50,12 @@ int main() {
         return 1;
     }
     */
+
+    game->ft = (FontPoly*) calloc(1, sizeof(FontPoly));
+    if (!game->ft) {
+        printf("Error: calloc of FontTexture failed\n");
+        return 1;
+    }
    
     // attempt to calloc space for the mouse rectangle
     game->mouseRect = calloc(1, sizeof(SDL_Rect));
