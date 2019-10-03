@@ -37,6 +37,9 @@ typedef struct Game {
     // Pointer to the player character
     //Character* player;
 
+    // Font polygon for in-game messages
+    FontPoly* ft;
+
 } Game;
 
 //! Function to delete memory used by a game object

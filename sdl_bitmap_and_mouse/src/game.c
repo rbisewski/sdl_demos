@@ -35,13 +35,20 @@ char* DeleteGame(Game* game) {
         game->currentLevel = NULL;
     }
 
+    if (game && game->ft) {
+        if (!freeFontPoly(game->ft)) {
+            return "Error: Unable to free Font polygon.";
+        }
+        free(game->ft);
+        game->ft = NULL;
+    }
+
     // Free the game object itself
     if (game) {
         free(game);
         game = NULL;
     }
 
-    // everything was freed correctly
     return "";
 }
 
@@ -56,7 +63,6 @@ bool ProcessInput(Game* g) {
 
     // Variable declaration
     char* err    = "";
-    FontPoly* ft = NULL;
     SDL_Event event;
     int mouse_x = 0;
     int mouse_y = 0;
@@ -183,7 +189,7 @@ bool ProcessInput(Game* g) {
     }
 
     // Create and SDL surface using the given font.
-    err = newFontPoly(ft, 100, 100, 100, 100, PRIMARY_FONT,
+    err = newFontPoly(g->ft, 100, 100, 100, 100, PRIMARY_FONT,
       SDL_COLOUR_BLACK, "Press the {e} key to switch between "
       "desert / grass / swamp biomes.", RENDERER);
 
@@ -191,14 +197,6 @@ bool ProcessInput(Game* g) {
         printf(err);
         return 1;
     }
-
-    // TODO: this could probably be better handled elsewhere
-    if (!freeFontPoly(ft)) {
-        printf("Error: Unable to free Font polygon.");
-        return 1;
-    }
-    free(ft);
-    ft = NULL;
 
     // Obtain the current position of the mouse.
     SDL_GetMouseState(&mouse_x, &mouse_y);

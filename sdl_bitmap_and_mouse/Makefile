@@ -19,7 +19,7 @@ LIBS= ${SDL_LIBS} \
       -L/usr/lib
 
 # Flags
-CFLAGS = -std=gnu11 \
+CFLAGS = -std=gnu18 \
          -O2 \
          -fpic \
          -Wall \

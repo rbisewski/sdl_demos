@@ -13,31 +13,23 @@
  */
 char* newLevel(Level* level, const char* const label, unsigned int type) {
 
-    // input validation
     if (!level || strlen(label) < 1) {
         return "newLevel() --> invalid input";
     }
 
-    // variable declaration
     char* err = "";
 
-    // assign the label and type
     level->label = (char*) label;
     level->type  = type;
 
     // If already ground tiles, free them.
-    // TODO: fix this
-    /*
     if (level->ground_tiles) {
         free(level->ground_tiles);
         level->ground_tiles = NULL;
     }
-    */
 
-    // calloc memory for the ground tiles CSV
     level->ground_tiles = (CSV*) calloc(1, sizeof(CSV));
 
-    // ensure the calloc got mem
     if (!level->ground_tiles) {
         free(level);
         return "newLevel() --> unable to calloc CSV";
@@ -46,7 +38,6 @@ char* newLevel(Level* level, const char* const label, unsigned int type) {
     // procedurally generate the ground tiles of the level
     err = procedurallyGenerateCSV(level);
 
-    // ensure no errors occurred
     if (strlen(err) > 0) {
         return err;
     }
@@ -107,7 +98,7 @@ char* procedurallyGenerateCSV(Level* level) {
 
     // switch thru the different level types
     switch(level->type) {
-   
+
         // level is currently undefined
         case LEVEL_TYPE_IS_UNKNOWN:
             nothing_to_do = true;
@@ -162,32 +153,23 @@ char* procedurallyGenerateCSV(Level* level) {
  */
 char* assembleGroundTiles(Level* level, SDL_Renderer* renderer) {
 
-    // input validation
     if (!level) {
         return "assembleGroundTiles() --> invalid input";
     }
 
-    // variable declaration
     unsigned int i    = 0;
     unsigned int j    = 0;
     unsigned int e    = 0;
     unsigned int unit = 64;
 
-    // for every element in the csv
-    //
-    // TODO: clean this up
-    //
+    SDL_Rect* rect = (SDL_Rect*) calloc(1, sizeof(SDL_Rect));
+    if (!rect) {
+        return "assembleGroundTiles() --> unable to "
+          "calloc for SDL_Rect";
+    }
+
     for (i = 0; i < CSV_COLUMN_MAX; i++) {
         for (j = 0; j < CSV_ROW_MAX; j++) {
-
-            // Calloc mem for the rectangle
-            SDL_Rect* rect = (SDL_Rect*) calloc(1, sizeof(SDL_Rect));
-
-            // safety check, ensure this calloc'd
-            if (!rect) {
-                return "assembleGroundTiles() --> unable to "
-                  "calloc for SDL_Rect";
-            }
 
             // Set the diameters
             rect->x = i*unit;
@@ -198,24 +180,41 @@ char* assembleGroundTiles(Level* level, SDL_Renderer* renderer) {
             // grab the current tile value
             e = level->ground_tiles->data[i][j];
 
-            // render desert texture...
-            if (level->type == LEVEL_TYPE_IS_DESERT) {
-                SDL_QueryTexture(DESERT_TILES[e], NULL, NULL, &rect->w, &rect->h);
-                SDL_RenderCopy(renderer, DESERT_TILES[e], NULL, rect);
+            switch(level->type) {
 
-            // render grass texture...
-            } else if (level->type == LEVEL_TYPE_IS_GRASS) {
-                SDL_QueryTexture(GRASS_TILES[e], NULL, NULL, &rect->w, &rect->h);
-                SDL_RenderCopy(renderer, GRASS_TILES[e], NULL, rect);
+                // level is currently undefined
+                case LEVEL_TYPE_IS_UNKNOWN:
+                    break;
 
-            // render swamp texture...
-            } else if (level->type == LEVEL_TYPE_IS_SWAMP) {
-                SDL_QueryTexture(SWAMP_TILES[e], NULL, NULL, &rect->w, &rect->h);
-                SDL_RenderCopy(renderer, SWAMP_TILES[e], NULL, rect);
+                // level is grass
+                case LEVEL_TYPE_IS_GRASS:
+                    SDL_QueryTexture(GRASS_TILES[e], NULL, NULL, &rect->w, &rect->h);
+                    SDL_RenderCopy(renderer, GRASS_TILES[e], NULL, rect);
+                    break;
+
+                // level is swamp
+                case LEVEL_TYPE_IS_SWAMP:
+                    SDL_QueryTexture(SWAMP_TILES[e], NULL, NULL, &rect->w, &rect->h);
+                    SDL_RenderCopy(renderer, SWAMP_TILES[e], NULL, rect);
+                    break;
+
+                // level is desert
+                case LEVEL_TYPE_IS_DESERT:
+                    SDL_QueryTexture(DESERT_TILES[e], NULL, NULL, &rect->w, &rect->h);
+                    SDL_RenderCopy(renderer, DESERT_TILES[e], NULL, rect);
+                    break;
+
+                // catch-all
+                default:
+                    break;
             }
         }
     }
 
-    // otherwise everything worked, so no error message
+    if (rect) {
+        free(rect);
+        rect = NULL;
+    }
+
     return "";
 }

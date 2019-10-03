@@ -24,17 +24,3 @@ SDL_Texture*  MOUSE_GFX    = NULL;
 SDL_Texture** DESERT_TILES = NULL;
 SDL_Texture** GRASS_TILES  = NULL;
 SDL_Texture** SWAMP_TILES  = NULL;
-
-//SDL_Texture* BG_TEXTURE        = NULL;
-//SDL_Texture* SPRITE_TEXTURE    = NULL;
-//SDL_Rect* COLLISION_MASK_RECTS = NULL;
-//SDL_Rect* SPRITE_RECTS         = NULL;
-
-// Variable to store our worldmap object.
-//Map* WORLDMAP = NULL;
-
-// Variable to store our character / world map animations.
-//Animation* ANIMATIONS = NULL;
-
-// Variable to store our array of sprite / character collision masks.
-//CollisionMask** COLLISION_MASKS = NULL;
