@@ -49,6 +49,7 @@ char* InitTextures() {
     memset(&img_path, 0, 256*sizeof(char));
     MOUSE_GFX = SDL_CreateTextureFromSurface(RENDERER, tmp_surface);
     SDL_FreeSurface(tmp_surface);
+    tmp_surface = NULL;
 
     // ensure calloc worked
     if (!MOUSE_GFX) {
@@ -96,11 +97,17 @@ char* InitTextures() {
             return "InitTextures() --> unable to assemble desert img path";
         }
 
-        // load the image into memory
         tmp_surface = SDL_LoadBMP((char*) img_path);
+        if (!tmp_surface) {
+            return "InitTextures() --> unable to open file in: "LEVEL_TYPE_DESERT_PATH;
+        }
+
+        // load the image into memory
         memset(&img_path, 0, 256*sizeof(char));
         DESERT_TILES[i-1] = SDL_CreateTextureFromSurface(RENDERER, tmp_surface);
+
         SDL_FreeSurface(tmp_surface);
+        tmp_surface = NULL;
     }
 
     // Load all of the grass tiles.
@@ -114,11 +121,17 @@ char* InitTextures() {
             return "InitTextures() --> unable to assemble grass img path";
         }
 
-        // load the image into memory
         tmp_surface = SDL_LoadBMP((char*) img_path);
+        if (!tmp_surface) {
+            return "InitTextures() --> unable to open file in: "LEVEL_TYPE_GRASS_PATH;
+        }
+
+        // load the image into memory
         memset(&img_path, 0, 256*sizeof(char));
         GRASS_TILES[i-1] = SDL_CreateTextureFromSurface(RENDERER, tmp_surface);
+
         SDL_FreeSurface(tmp_surface);
+        tmp_surface = NULL;
     }
 
     // Load all of the swamp tiles.
@@ -132,11 +145,17 @@ char* InitTextures() {
             return "InitTextures() --> unable to assemble swamp img path";
         }
 
-        // load the image into memory
         tmp_surface = SDL_LoadBMP((char*) img_path);
+        if (!tmp_surface) {
+            return "InitTextures() --> unable to open file in: "LEVEL_TYPE_SWAMP_PATH;
+        }
+
+        // load the image into memory
         memset(&img_path, 0, 256*sizeof(char));
         SWAMP_TILES[i-1] = SDL_CreateTextureFromSurface(RENDERER, tmp_surface);
+
         SDL_FreeSurface(tmp_surface);
+        tmp_surface = NULL;
     }
 
     return "";

@@ -54,6 +54,7 @@ char* newFontPoly(FontPoly* ft, int x, int y, int h, int w,
     // Create a SDL texture from the surface.
     if (ft->texture) {
         SDL_DestroyTexture(ft->texture);
+        ft->texture = NULL;
     }
     ft->texture = SDL_CreateTextureFromSurface(renderer, ft->surface);
     if (!ft->texture) {
@@ -68,7 +69,6 @@ char* newFontPoly(FontPoly* ft, int x, int y, int h, int w,
     SDL_QueryTexture(ft->texture, NULL, NULL, &ft->rect->w, &ft->rect->h);
     SDL_RenderCopy(renderer, ft->texture, NULL, ft->rect);
 
-    // Everything was good, so return the empty string.
     return "";
 }
 
