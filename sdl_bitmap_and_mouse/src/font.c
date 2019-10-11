@@ -85,7 +85,7 @@ bool freeFontPoly(FontPoly* ft) {
     }
 
     if (ft->texture) {
-        SDL_DestroyTexture(ft->texture);
+        free(ft->texture);
         ft->texture = NULL;
     }
 

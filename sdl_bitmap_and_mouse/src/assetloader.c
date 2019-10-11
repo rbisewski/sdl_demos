@@ -91,7 +91,6 @@ char* InitTextures() {
         // assemble the path string
         sprintf(img_path, LEVEL_TYPE_DESERT_PATH"%d.bmp", i);
 
-        // safety check, ensure the int could actually be converted
         if (strlen(img_path) < 1) {
             DeleteTextures();
             return "InitTextures() --> unable to assemble desert img path";
@@ -110,7 +109,6 @@ char* InitTextures() {
         // assemble the path string
         sprintf(img_path, LEVEL_TYPE_GRASS_PATH"%d.bmp", i);
 
-        // safety check, ensure the int could actually be converted
         if (strlen(img_path) < 1) {
             DeleteTextures();
             return "InitTextures() --> unable to assemble grass img path";
@@ -129,7 +127,6 @@ char* InitTextures() {
         // assemble the path string
         sprintf(img_path, LEVEL_TYPE_SWAMP_PATH"%d.bmp", i);
 
-        // safety check, ensure the int could actually be converted
         if (strlen(img_path) < 1) {
             DeleteTextures();
             return "InitTextures() --> unable to assemble swamp img path";
