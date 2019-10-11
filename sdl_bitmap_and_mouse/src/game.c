@@ -12,7 +12,6 @@
  */
 char* DeleteGame(Game* game) {
 
-    // input validation
     if (!game) {
         return "DeleteGame() --> invalid input";
     }

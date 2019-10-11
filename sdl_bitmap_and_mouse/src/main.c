@@ -9,24 +9,20 @@
 //
 int main() {
 
-    // Variable declaration
     char* err  = "";
     Game* game = NULL;
     unsigned int updateTimer   = 999;
     unsigned int timeDelta     = 0;
     unsigned int previousTicks = SDL_GetTicks();
 
-    // Attempt to calloc some memory for the primary game object.
     game = calloc(1, sizeof(Game));
-
-    // Safety check, ensure no error occurred.
     if (!game) {
-        printf("Error: Unable to calloc memory for the game object\n");
+        printf("Error: Unable to calloc memory for the primary game object\n");
         return 1;
     }
 
-    // Initialize SDL, or end if an error occurred.
     if (!StartupSDL()) {
+        printf("Error: Unable to initialize SDL\n");
         return 1;
     }
 
@@ -35,8 +31,6 @@ int main() {
 
     // Go ahead and load all of the assets
     err = LoadAssets();
-
-    // terminate the program if an error occurred
     if (strlen(err) > 0) {
         printf(err);
         return 1;
@@ -57,19 +51,13 @@ int main() {
         return 1;
     }
    
-    // attempt to calloc space for the mouse rectangle
     game->mouseRect = calloc(1, sizeof(SDL_Rect));
-
-    // Safety check, ensure no error occurred.
     if (!game->mouseRect) {
         printf("Error: Unable to calloc memory for the mouse rectangle\n");
         return 1;
     }
 
-    // Set the current game level to the initial level
     game->currentLevel = calloc(1, sizeof(Level));
-
-    // Safety check, ensure no error occurred.
     if (!game->currentLevel) {
         printf("Error: Unable to calloc memory for current game level\n");
         return 1;
@@ -79,7 +67,6 @@ int main() {
     err = newLevel(game->currentLevel, "sample desert level",
       LEVEL_TYPE_IS_DESERT);
 
-    // Safety check, ensure no error occurred.
     if (strlen(err) > 0) {
         printf(err);
         return 1;
@@ -139,15 +126,11 @@ int main() {
     // Free memory used by SDL
     DestroySDL();
 
-    // If the game object is still using memory, go ahead and clear it.
     err = DeleteGame(game);
-
-    // Safety check, ensure no error occurred.
     if (strlen(err) > 0) {
         printf(err);
         return 1;
     }
 
-    // If the program got this far, go ahead and exit with a success.
     return 0;
 }

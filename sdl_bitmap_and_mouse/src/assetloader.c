@@ -142,7 +142,6 @@ char* InitTextures() {
         SDL_FreeSurface(tmp_surface);
     }
 
-    // everything worked okay
     return "";
 }
 

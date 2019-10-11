@@ -7,7 +7,7 @@ int SCALED_SCREEN_H = SCREEN_H * GRAPHICS_SCALE;
 // Main game font.
 TTF_Font* PRIMARY_FONT          = NULL;
 char*     PRIMARY_FONT_LOCATION = "fonts/EightBit.ttf";
-int       PRIMARY_FONT_SIZE     = 32; // probably 16 is ideal
+int       PRIMARY_FONT_SIZE     = 32;
 
 // Assign the primary text colour.
 SDL_Color SDL_COLOUR_EGGSHELL = {201, 201, 201, 255};
