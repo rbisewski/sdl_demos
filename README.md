@@ -36,3 +36,14 @@ Build the project like so:
 ```bash
 make
 ```
+
+### SDL2 alongside Rust
+
+Similar to the above, only this demo is designed to showcase to how call
+SDL2 and C functions from Rust.
+
+Build the project like so:
+
+```bash
+make
+```
