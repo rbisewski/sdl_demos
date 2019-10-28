@@ -16,7 +16,7 @@ SDL_LIBS=`sdl2-config --libs`
 # Standard Libraries
 LIBS= ${SDL_LIBS} \
       -lSDL2_ttf \
-      -l:${SRC_DIR}/libcsv.a \
+      -l:${SRC_DIR}/libcsv.so \
       -L. \
       -L/usr/lib
 
@@ -50,7 +50,6 @@ SRC = $(SRC_DIR)/main.c \
       $(SRC_DIR)/level.c \
       $(SRC_DIR)/sdl_funcs.c \
       $(SRC_DIR)/camera.c \
-      $(SRC_DIR)/csv.c \
       $(SRC_DIR)/game.c \
       $(SRC_DIR)/font.c \
       $(SRC_DIR)/sdl_funcs.c \
@@ -64,9 +63,9 @@ OBJ = ${SRC:.c=.o}
 # To emit objects instead, use this command:
 # RUST = rustc --emit obj
 #
-# The default is just to generate a static lib.
+# The default is just to generate a .so C lib
 #
-RUST = rustc --crate-type=staticlib
+RUST = rustc --crate-type=cdylib
 
 # Rust sources
 RS = $(SRC_DIR)/csv.rs
@@ -84,7 +83,7 @@ all: clean ${PROJECT_NAME}
 
 .c.o:
 	@echo CC $<
-	@${CC} -c ${CFLAGS} $< -o ${<:.c=.o}
+	@${CC} -c ${CFLAGS} ${LIBS} $< -o ${<:.c=.o}
 
 ${PROJECT_NAME}: ${OBJ}
 	@echo ${RUST} ${RS} --out-dir ${SRC_DIR}
@@ -94,4 +93,4 @@ ${PROJECT_NAME}: ${OBJ}
 
 clean:
 	@echo "Cleaning away old build..."
-	@rm -f ${PROJECT_NAME} $(SRC_DIR)/*.o $(SRC_DIR)/*.a
+	@rm -f ${PROJECT_NAME} $(SRC_DIR)/*.o $(SRC_DIR)/*.so

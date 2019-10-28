@@ -35,6 +35,11 @@ char* newLevel(Level* level, const char* const label, unsigned int type) {
         return "newLevel() --> unable to calloc CSV";
     }
 
+    if (!initializeCSV(*level->ground_tiles)) {
+        free(level);
+        return "newLevel() --> unable to initialize CSV";
+    }
+
     // procedurally generate the ground tiles of the level
     err = procedurallyGenerateCSV(level);
 
