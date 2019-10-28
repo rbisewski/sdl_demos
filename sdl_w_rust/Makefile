@@ -17,6 +17,7 @@ SDL_LIBS=`sdl2-config --libs`
 LIBS= ${SDL_LIBS} \
       -lSDL2_ttf \
       -l:${SRC_DIR}/libcsv.so \
+      -l:${SRC_DIR}/libcamera.so \
       -L. \
       -L/usr/lib
 
@@ -40,7 +41,6 @@ HDR = $(SRC_DIR)/main.h \
       $(SRC_DIR)/csv.h \
       $(SRC_DIR)/game.h \
       $(SRC_DIR)/font.h \
-      $(SRC_DIR)/size.h \
       $(SRC_DIR)/sdl_funcs.h \
       $(SRC_DIR)/globals.h
 
@@ -49,7 +49,6 @@ SRC = $(SRC_DIR)/main.c \
       $(SRC_DIR)/assetloader.c \
       $(SRC_DIR)/level.c \
       $(SRC_DIR)/sdl_funcs.c \
-      $(SRC_DIR)/camera.c \
       $(SRC_DIR)/game.c \
       $(SRC_DIR)/font.c \
       $(SRC_DIR)/sdl_funcs.c \
@@ -68,7 +67,7 @@ OBJ = ${SRC:.c=.o}
 RUST = rustc --crate-type=cdylib
 
 # Rust sources
-RS = $(SRC_DIR)/csv.rs
+# RS = $(SRC_DIR)/csv.rs
 
 #
 # Makefile options
@@ -79,15 +78,19 @@ RS = $(SRC_DIR)/csv.rs
 .PHONY: all clean
 
 
-all: clean ${PROJECT_NAME}
+all: clean rustc ${PROJECT_NAME}
 
 .c.o:
 	@echo CC $<
 	@${CC} -c ${CFLAGS} ${LIBS} $< -o ${<:.c=.o}
 
+rustc:
+	@echo ${RUST} $(SRC_DIR)/csv.rs --out-dir ${SRC_DIR}
+	@${RUST} $(SRC_DIR)/csv.rs --out-dir ${SRC_DIR}
+	@echo ${RUST} $(SRC_DIR)/camera.rs --out-dir ${SRC_DIR}
+	@${RUST} $(SRC_DIR)/camera.rs --out-dir ${SRC_DIR}
+
 ${PROJECT_NAME}: ${OBJ}
-	@echo ${RUST} ${RS} --out-dir ${SRC_DIR}
-	@${RUST} ${RS} --out-dir ${SRC_DIR}
 	@echo ${CC} ${CFLAGS} ${INCLUDES} -o $@ ${LIBS} $^
 	@${CC} ${CFLAGS} ${INCLUDES} -o $@ ${LIBS} $^
 
