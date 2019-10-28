@@ -1,10 +1,10 @@
 #
 # Makefile for the project
 #
-PROJECT_NAME=sdl_bitmap_and_mouse
+PROJECT_NAME=sdl_w_rust
 
 # Location of the source code
-SRC_DIR=src/
+SRC_DIR=src
 
 # Includes
 INCLUDES= -I. \
@@ -16,6 +16,8 @@ SDL_LIBS=`sdl2-config --libs`
 # Standard Libraries
 LIBS= ${SDL_LIBS} \
       -lSDL2_ttf \
+      -l:${SRC_DIR}/libcsv.a \
+      -L. \
       -L/usr/lib
 
 # Flags
@@ -27,36 +29,47 @@ CFLAGS = -std=gnu18 \
          -Wpedantic \
          -Wno-missing-braces
 
-# Compiler
+# C compiler
 CC = cc -g
 
 # Headers
-HDR = $(SRC_DIR)main.h \
-      $(SRC_DIR)assetloader.h \
-      $(SRC_DIR)level.h \
-      $(SRC_DIR)camera.h \
-      $(SRC_DIR)csv.h \
-      $(SRC_DIR)game.h \
-      $(SRC_DIR)font.h \
-      $(SRC_DIR)size.h \
-      $(SRC_DIR)sdl_funcs.h \
-      $(SRC_DIR)globals.h
+HDR = $(SRC_DIR)/main.h \
+      $(SRC_DIR)/assetloader.h \
+      $(SRC_DIR)/level.h \
+      $(SRC_DIR)/camera.h \
+      $(SRC_DIR)/csv.h \
+      $(SRC_DIR)/game.h \
+      $(SRC_DIR)/font.h \
+      $(SRC_DIR)/size.h \
+      $(SRC_DIR)/sdl_funcs.h \
+      $(SRC_DIR)/globals.h
 
 # C sources
-SRC = $(SRC_DIR)main.c \
-      $(SRC_DIR)assetloader.c \
-      $(SRC_DIR)level.c \
-      $(SRC_DIR)sdl_funcs.c \
-      $(SRC_DIR)camera.c \
-      $(SRC_DIR)csv.c \
-      $(SRC_DIR)game.c \
-      $(SRC_DIR)font.c \
-      $(SRC_DIR)sdl_funcs.c \
-      $(SRC_DIR)globals.c
+SRC = $(SRC_DIR)/main.c \
+      $(SRC_DIR)/assetloader.c \
+      $(SRC_DIR)/level.c \
+      $(SRC_DIR)/sdl_funcs.c \
+      $(SRC_DIR)/camera.c \
+      $(SRC_DIR)/csv.c \
+      $(SRC_DIR)/game.c \
+      $(SRC_DIR)/font.c \
+      $(SRC_DIR)/sdl_funcs.c \
+      $(SRC_DIR)/globals.c
 
 # C objects
 OBJ = ${SRC:.c=.o}
 
+# Rust compiler
+#
+# To emit objects instead, use this command:
+# RUST = rustc --emit obj
+#
+# The default is just to generate a static lib.
+#
+RUST = rustc --crate-type=staticlib
+
+# Rust sources
+RS = $(SRC_DIR)/csv.rs
 
 #
 # Makefile options
@@ -74,9 +87,11 @@ all: clean ${PROJECT_NAME}
 	@${CC} -c ${CFLAGS} $< -o ${<:.c=.o}
 
 ${PROJECT_NAME}: ${OBJ}
+	@echo ${RUST} ${RS} --out-dir ${SRC_DIR}
+	@${RUST} ${RS} --out-dir ${SRC_DIR}
 	@echo ${CC} ${CFLAGS} ${INCLUDES} -o $@ ${LIBS} $^
 	@${CC} ${CFLAGS} ${INCLUDES} -o $@ ${LIBS} $^
 
 clean:
 	@echo "Cleaning away old build..."
-	@rm -f ${PROJECT_NAME} $(SRC_DIR)*.o
+	@rm -f ${PROJECT_NAME} $(SRC_DIR)/*.o $(SRC_DIR)/*.a

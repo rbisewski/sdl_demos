@@ -1,4 +1,4 @@
-#![crate_type = "lib"]
+#![crate_type = "staticlib"]
 #![no_std]
 
 extern crate std;
@@ -15,6 +15,7 @@ pub const CSV_ROW_MAX: usize = 32;
 //
 // CSV
 //
+#[repr(C)]
 pub struct CSV {
     currently_has_csv_data: bool,
     data: [[u32; CSV_COLUMN_MAX]; CSV_ROW_MAX],

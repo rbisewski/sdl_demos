@@ -13,6 +13,12 @@
 
 #define WINDOW_NAME "Tiling and Level and Mouse Demo"
 
+// TODO: delete these if the CSV header meshes well with Rust
+//
+//#define CSV_LINE_BUFFER_SIZE 16
+//#define CSV_COLUMN_MAX 48
+//#define CSV_ROW_MAX 32
+
 extern int SCALED_SCREEN_W;
 extern int SCALED_SCREEN_H;
 
