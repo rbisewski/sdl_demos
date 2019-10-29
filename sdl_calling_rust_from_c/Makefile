@@ -1,7 +1,7 @@
 #
 # Makefile for the project
 #
-PROJECT_NAME=sdl_w_rust
+PROJECT_NAME=sdl_calling_rust_from_c
 
 # Location of the source code
 SRC_DIR=src
