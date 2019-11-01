@@ -48,7 +48,8 @@ pub fn main() {
     canvas.present();
 
     // load the textures
-    let _ = match assetloader::init_textures(&canvas) {
+    let mut assets: assetloader::Assets;
+    let _ = match assetloader::init_textures(&assets, &canvas) {
         Err(e) => {
             println!("{:?}", e);
             return;

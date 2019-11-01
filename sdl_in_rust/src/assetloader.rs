@@ -1,10 +1,13 @@
 /*
  * Description: functions for loading assets
  */
+
 extern crate sdl2;
 
 use std::path::PathBuf;
 use sdl2::surface::*;
+
+use std::collections::HashMap;
 
 pub const UI_GFX_LOCATION: &str = "img/ui/";
 pub const LEVEL_TYPE_DESERT_PATH: &str = "img/desert/";
@@ -15,7 +18,14 @@ pub const LEVEL_TYPE_DESERT_MAX: i32 = 6;
 pub const LEVEL_TYPE_GRASS_MAX: i32 = 14;
 pub const LEVEL_TYPE_SWAMP_MAX: i32 = 13;
 
-pub fn init_textures(canvas: &sdl2::render::Canvas<sdl2::video::Window>) -> Result<(), String> {
+//
+// Assets
+//
+pub struct Assets {
+    textures: HashMap<&'static str, sdl2::render::Texture<'static>>
+}
+
+pub fn init_textures(assets: &Assets, canvas: &sdl2::render::Canvas<sdl2::video::Window>) -> Result<(), String> {
 
     let path_to_mouse_gfx: PathBuf = [UI_GFX_LOCATION, "mouse.bmp"].iter().collect();
 
@@ -30,7 +40,13 @@ pub fn init_textures(canvas: &sdl2::render::Canvas<sdl2::video::Window>) -> Resu
     };
 
     let mouse_tc = canvas.texture_creator();
-    let _mouse_gfx = mouse_tc.create_texture_from_surface(mouse_surface);
+    let mouse_gfx = match mouse_tc.create_texture_from_surface(mouse_surface) {
+        Err(e) => return Err(e.to_string()),
+        Ok(r) => r,
+    };
+
+    // TODO: implement this
+    //TEXTURES.insert(&String::from("mouse_gfx"), mouse_gfx);
 
     // Load all of the desert tiles.
     for i in 1..LEVEL_TYPE_DESERT_MAX {
