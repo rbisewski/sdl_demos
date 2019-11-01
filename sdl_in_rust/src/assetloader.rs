@@ -7,6 +7,13 @@ use std::path::PathBuf;
 use sdl2::surface::*;
 
 pub const UI_GFX_LOCATION: &str = "img/ui/";
+pub const LEVEL_TYPE_DESERT_PATH: &str = "img/desert/";
+pub const LEVEL_TYPE_GRASS_PATH: &str = "img/grass/";
+pub const LEVEL_TYPE_SWAMP_PATH: &str = "img/swamp/";
+
+pub const LEVEL_TYPE_DESERT_MAX: i32 = 6;
+pub const LEVEL_TYPE_GRASS_MAX: i32 = 14;
+pub const LEVEL_TYPE_SWAMP_MAX: i32 = 13;
 
 pub fn init_textures(canvas: &sdl2::render::Canvas<sdl2::video::Window>) -> Result<(), String> {
 
@@ -25,89 +32,74 @@ pub fn init_textures(canvas: &sdl2::render::Canvas<sdl2::video::Window>) -> Resu
     let mouse_tc = canvas.texture_creator();
     let _mouse_gfx = mouse_tc.create_texture_from_surface(mouse_surface);
 
-    //// attempt to calloc mem for the desert tile textures
-    //DESERT_TILES = (SDL_Texture**) calloc(LEVEL_TYPE_DESERT_MAX,
-    //  sizeof(SDL_Texture*));
+    // Load all of the desert tiles.
+    for i in 1..LEVEL_TYPE_DESERT_MAX {
 
-    //// attempt to calloc mem for the grass tile textures
-    //GRASS_TILES = (SDL_Texture**) calloc(LEVEL_TYPE_GRASS_MAX,
-    //  sizeof(SDL_Texture*));
+        let path: PathBuf = [LEVEL_TYPE_DESERT_PATH, &format!("{}",i), ".bmp"].iter().collect();
 
-    //// attempt to calloc mem for the swamp tile textures
-    //SWAMP_TILES = (SDL_Texture**) calloc(LEVEL_TYPE_SWAMP_MAX,
-    //  sizeof(SDL_Texture*));
+        let path_canon = match path.canonicalize() {
+            Err(e) => return Err(e.to_string()),
+            Ok(p) => p,
+        };
 
-    //// Load all of the desert tiles.
-    //for (i = 1; i < LEVEL_TYPE_DESERT_MAX; i++) {
+        //tmp_surface = SDL_LoadBMP((char*) img_path);
+        //if (!tmp_surface) {
+        //    return "InitTextures() --> unable to open file in: "LEVEL_TYPE_DESERT_PATH;
+        //}
 
-    //    // assemble the path string
-    //    sprintf(img_path, LEVEL_TYPE_DESERT_PATH"%d.bmp", i);
+        //// load the image into memory
+        //memset(&img_path, 0, 256*sizeof(char));
+        //DESERT_TILES[i-1] = SDL_CreateTextureFromSurface(RENDERER, tmp_surface);
 
-    //    if (strlen(img_path) < 1) {
-    //        DeleteTextures();
-    //        return "InitTextures() --> unable to assemble desert img path";
-    //    }
+        //SDL_FreeSurface(tmp_surface);
+        //tmp_surface = NULL;
+    }
 
-    //    tmp_surface = SDL_LoadBMP((char*) img_path);
-    //    if (!tmp_surface) {
-    //        return "InitTextures() --> unable to open file in: "LEVEL_TYPE_DESERT_PATH;
-    //    }
+    // Load all of the grass tiles.
+    for i in 1..LEVEL_TYPE_GRASS_MAX {
 
-    //    // load the image into memory
-    //    memset(&img_path, 0, 256*sizeof(char));
-    //    DESERT_TILES[i-1] = SDL_CreateTextureFromSurface(RENDERER, tmp_surface);
+        let path: PathBuf = [LEVEL_TYPE_GRASS_PATH, &format!("{}",i), ".bmp"].iter().collect();
 
-    //    SDL_FreeSurface(tmp_surface);
-    //    tmp_surface = NULL;
-    //}
+        let path_canon = match path.canonicalize() {
+            Err(e) => return Err(e.to_string()),
+            Ok(p) => p,
+        };
 
-    //// Load all of the grass tiles.
-    //for (i = 1; i < LEVEL_TYPE_GRASS_MAX; i++) {
+        //tmp_surface = SDL_LoadBMP((char*) img_path);
+        //if (!tmp_surface) {
+        //    return "InitTextures() --> unable to open file in: "LEVEL_TYPE_GRASS_PATH;
+        //}
 
-    //    // assemble the path string
-    //    sprintf(img_path, LEVEL_TYPE_GRASS_PATH"%d.bmp", i);
+        //// load the image into memory
+        //memset(&img_path, 0, 256*sizeof(char));
+        //GRASS_TILES[i-1] = SDL_CreateTextureFromSurface(RENDERER, tmp_surface);
 
-    //    if (strlen(img_path) < 1) {
-    //        DeleteTextures();
-    //        return "InitTextures() --> unable to assemble grass img path";
-    //    }
+        //SDL_FreeSurface(tmp_surface);
+        //tmp_surface = NULL;
+    }
 
-    //    tmp_surface = SDL_LoadBMP((char*) img_path);
-    //    if (!tmp_surface) {
-    //        return "InitTextures() --> unable to open file in: "LEVEL_TYPE_GRASS_PATH;
-    //    }
+    // Load all of the swamp tiles.
+    for i in 1..LEVEL_TYPE_SWAMP_MAX {
 
-    //    // load the image into memory
-    //    memset(&img_path, 0, 256*sizeof(char));
-    //    GRASS_TILES[i-1] = SDL_CreateTextureFromSurface(RENDERER, tmp_surface);
+        let path: PathBuf = [LEVEL_TYPE_SWAMP_PATH, &format!("{}",i), ".bmp"].iter().collect();
 
-    //    SDL_FreeSurface(tmp_surface);
-    //    tmp_surface = NULL;
-    //}
+        let path_canon = match path.canonicalize() {
+            Err(e) => return Err(e.to_string()),
+            Ok(p) => p,
+        };
 
-    //// Load all of the swamp tiles.
-    //for (i = 1; i < LEVEL_TYPE_SWAMP_MAX; i++) {
+        //tmp_surface = SDL_LoadBMP((char*) img_path);
+        //if (!tmp_surface) {
+        //    return "InitTextures() --> unable to open file in: "LEVEL_TYPE_SWAMP_PATH;
+        //}
 
-    //    // assemble the path string
-    //    sprintf(img_path, LEVEL_TYPE_SWAMP_PATH"%d.bmp", i);
+        //// load the image into memory
+        //memset(&img_path, 0, 256*sizeof(char));
+        //SWAMP_TILES[i-1] = SDL_CreateTextureFromSurface(RENDERER, tmp_surface);
 
-    //    if (strlen(img_path) < 1) {
-    //        DeleteTextures();
-    //        return "InitTextures() --> unable to assemble swamp img path";
-    //    }
-
-    //    tmp_surface = SDL_LoadBMP((char*) img_path);
-    //    if (!tmp_surface) {
-    //        return "InitTextures() --> unable to open file in: "LEVEL_TYPE_SWAMP_PATH;
-    //    }
-
-    //    // load the image into memory
-    //    memset(&img_path, 0, 256*sizeof(char));
-    //    SWAMP_TILES[i-1] = SDL_CreateTextureFromSurface(RENDERER, tmp_surface);
-
-    //    SDL_FreeSurface(tmp_surface);
-    //    tmp_surface = NULL;
-    //}
+        //SDL_FreeSurface(tmp_surface);
+        //tmp_surface = NULL;
+    }
 
     Ok(())
 }
