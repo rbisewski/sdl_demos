@@ -22,31 +22,43 @@ pub const LEVEL_TYPE_SWAMP_MAX: i32 = 13;
 // Assets
 //
 pub struct Assets {
-    textures: HashMap<&'static str, sdl2::render::Texture<'static>>
+    pub tcs: HashMap<&'static str, sdl2::render::TextureCreator<sdl2::video::WindowContext>>,
+    pub textures: HashMap<&'static str, sdl2::render::Texture<'static>>,
 }
 
-pub fn init_textures(assets: &Assets, canvas: &sdl2::render::Canvas<sdl2::video::Window>) -> Result<(), String> {
+pub fn init_textures(
+    assets: &'static mut Assets,
+    canvas: &sdl2::render::Canvas<sdl2::video::Window>
+    ) -> Result<(), String> {
+
+    assets.tcs.insert("mouse_gfx_tc", canvas.texture_creator());
 
     let path_to_mouse_gfx: PathBuf = [UI_GFX_LOCATION, "mouse.bmp"].iter().collect();
 
-    let path_to_mouse_gfx_canon = match path_to_mouse_gfx.canonicalize() {
+    match path_to_mouse_gfx.canonicalize() {
         Err(e) => return Err(e.to_string()),
-        Ok(p) => p,
-    };
+        Ok(path) => {
 
-    let mouse_surface = match Surface::load_bmp(path_to_mouse_gfx_canon) {
-        Err(e) => return Err(e.to_string()),
-        Ok(s) => s,
-    };
+            match Surface::load_bmp(path) {
+                Err(e) => return Err(e.to_string()),
+                Ok(mouse_surface) => {
 
-    let mouse_tc = canvas.texture_creator();
-    let mouse_gfx = match mouse_tc.create_texture_from_surface(mouse_surface) {
-        Err(e) => return Err(e.to_string()),
-        Ok(r) => r,
-    };
+                    match assets.tcs.get("mouse_gfx_tc") {
+                        None => return Err("Error: Unable to find reference to TextureCreator!".to_string()),
+                        Some(mouse_tc) => {
 
-    // TODO: implement this
-    //TEXTURES.insert(&String::from("mouse_gfx"), mouse_gfx);
+                            match mouse_tc.create_texture_from_surface(mouse_surface) {
+                                Err(e) => return Err(e.to_string()),
+                                Ok(mouse_gfx) => {
+                                    assets.textures.insert("mouse_gfx", mouse_gfx);
+                                },
+                            };
+                        },
+                    };
+                },
+            };
+        },
+    };
 
     // Load all of the desert tiles.
     for i in 1..LEVEL_TYPE_DESERT_MAX {

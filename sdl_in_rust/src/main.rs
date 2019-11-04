@@ -4,6 +4,7 @@ use sdl2::pixels::Color;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use std::time::Duration;
+use std::collections::HashMap;
 
 mod assetloader;
 
@@ -47,9 +48,14 @@ pub fn main() {
     canvas.clear();
     canvas.present();
 
+    // TODO: get this to work as a static definition
     // load the textures
-    let mut assets: assetloader::Assets;
-    let _ = match assetloader::init_textures(&assets, &canvas) {
+    let mut assets = assetloader::Assets {
+        tcs: HashMap::new(),
+        textures: HashMap::new(),
+    };
+
+    let _ = match assetloader::init_textures(&mut assets, &canvas) {
         Err(e) => {
             println!("{:?}", e);
             return;
