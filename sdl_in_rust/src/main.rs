@@ -3,8 +3,8 @@ extern crate sdl2;
 use sdl2::pixels::Color;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
+
 use std::time::Duration;
-use std::collections::HashMap;
 
 mod assetloader;
 
@@ -48,20 +48,17 @@ pub fn main() {
     canvas.clear();
     canvas.present();
 
-    // TODO: get this to work as a static definition
-    // load the textures
-    let mut assets = assetloader::Assets {
-        tcs: HashMap::new(),
-        textures: HashMap::new(),
-    };
+    let mut assets = assetloader::Assets::new();
 
-    let _ = match assetloader::init_textures(&mut assets, &canvas) {
-        Err(e) => {
-            println!("{:?}", e);
-            return;
-        },
-        Ok(r) => r,
-    };
+    // TODO: fix this
+    // load the textures
+    //match assets.init_textures(&canvas) {
+    //    Ok(_) => {},
+    //    Err(e) => {
+    //        println!("{:?}", e);
+    //        return;
+    //    },
+    //};
 
     let mut event_pump = match sdl_context.event_pump() {
         Err(e) => {
