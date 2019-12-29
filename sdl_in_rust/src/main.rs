@@ -48,9 +48,8 @@ pub fn main() {
     canvas.clear();
     canvas.present();
 
-    let mut assets = assetloader::Assets::new();
+    let mut assets: assetloader::Assets = assetloader::Assets::new();
 
-    // TODO: fix this
     // load the textures
     //match assets.init_textures(&canvas) {
     //    Ok(_) => {},

@@ -64,7 +64,7 @@ impl<'a> Assets<'a> {
 
             let path: PathBuf = [LEVEL_TYPE_DESERT_PATH, &format!("{}",i), ".bmp"].iter().collect();
 
-            let path_canon = match path.canonicalize() {
+            let _path_canon = match path.canonicalize() {
                 Err(e) => return Err(e.to_string()),
                 Ok(p) => p,
             };
@@ -87,7 +87,7 @@ impl<'a> Assets<'a> {
 
             let path: PathBuf = [LEVEL_TYPE_GRASS_PATH, &format!("{}",i), ".bmp"].iter().collect();
 
-            let path_canon = match path.canonicalize() {
+            let _path_canon = match path.canonicalize() {
                 Err(e) => return Err(e.to_string()),
                 Ok(p) => p,
             };
@@ -110,7 +110,7 @@ impl<'a> Assets<'a> {
 
             let path: PathBuf = [LEVEL_TYPE_SWAMP_PATH, &format!("{}",i), ".bmp"].iter().collect();
 
-            let path_canon = match path.canonicalize() {
+            let _path_canon = match path.canonicalize() {
                 Err(e) => return Err(e.to_string()),
                 Ok(p) => p,
             };
